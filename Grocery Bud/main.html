@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="script.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+
+    <!-- <meta http-equiv="refresh" content="2"> -->
+</head>
+<body>
+
+    
+    <label for="userInput">Enter TODO/Grocery Bud</label>
+    <input type="text" id="userInput" placeholder="Don't type ligma balls">
+    <button type="button" id="submitbutton" onclick="processUserInput()">
+        Submit
+    </button>
+    
+    <h4 id="errorfield">
+        
+    </h4>
+
+    <div id="list" class="list">
+        <!-- Existing content goes here -->
+    </div>
+
+    <script>
+        var idIncrement = 0;
+        var useEdit = false;
+
+        var submitbutton = document.getElementById('submitbutton');
+        var userInput = document.getElementById('userInput');
+        var errorField = document.getElementById('errorfield');
+
+
+        userInput.addEventListener('keydown', function(event) {
+        if (event.keyCode === 13 && !useEdit) {
+            processUserInput();
+            event.preventDefault();
+        }
+        });
+
+
+        function processUserInput() {
+            var id = idIncrement;
+            var newParagraph = document.createElement('p');
+            var pButtonD = document.createElement('button');
+            var pButtonE = document.createElement('button');
+            var editText = 'Edit';
+            var delText = 'X';
+            var userInputVal = userInput.value;
+            var dynamicPattern = delText+editText;
+
+        
+
+
+            if(userInputVal.toLowerCase().replace(/\s/g, '') === 'ligmaballs')
+            {
+                window.open('https://m.youtube.com/watch?v=SChnJDfmrSU&t=19135s', '_blank');
+            }
+            else if(userInputVal.toLowerCase().replace(/\s/g, '') != '')
+            {
+
+                newParagraph.textContent = userInputVal + ' ';
+                newParagraph.classList.add('allentries');
+                pButtonE.textContent = editText;
+                pButtonD.textContent = delText;
+                pButtonD.classList.add('mediabuttons', 'deleteButtons');
+                pButtonE.classList.add('mediabuttons', 'editButtons');
+                pButtonD.id = 'buttonD' + id;
+                pButtonE.id = 'buttonE' + id;
+                pButtonD.onclick = function() { newParagraph.remove()};
+                pButtonE.onclick = function() {
+
+                    useEdit = true;
+                    
+                    submitbutton.textContent = 'Edit';
+                    newParagraph.style.borderRadius = '10px';
+                    newParagraph.style.backgroundColor = 'grey';
+                    var pattern = new RegExp(dynamicPattern, 'g');
+                    
+                    userInput.value = newParagraph.textContent.replace(pattern, '');
+                    
+                    userInput.focus();
+                    userInput.select();
+                    
+                    //copied method 3 times needs a more elegant solution
+                    //case for pressing enter needs to be fixed
+
+                    function resetSubmit() {
+                        newParagraph.textContent =  userInput.value + '  ';
+                        newParagraph.style = 'background-color: none';
+                        newParagraph.appendChild(pButtonD);
+                        newParagraph.appendChild(pButtonE);
+                        submitbutton.textContent = 'Submit';
+                        userInput.value = '';
+                        submitbutton.onclick = processUserInput;
+                        useEdit = false;
+                    }
+
+
+                    pButtonD.onclick = function() {
+                        resetSubmit();
+                        newParagraph.remove();}
+
+                    submitbutton.onclick = function() {
+                        resetSubmit();}
+                };
+
+
+                document.getElementById('list').appendChild(newParagraph);
+                
+                newParagraph.appendChild(pButtonD);
+                newParagraph.appendChild(pButtonE);
+
+                errorField.textContent = '';
+            }
+            else
+            {
+                errorField.textContent = 'Please type in a value dumbass!';
+            }
+            
+            userInput.value = '';
+
+            idIncrement++;
+        }
+        
+
+
+    </script>
+
+    <style>
+        .mediabuttons {
+        background-color: white;
+    }
+
+    .mediabuttons:hover {
+        cursor: pointer;
+        border-style: groove;
+        font-size: large;
+        transition: 0.2s;
+    }
+
+    .list {
+        border-style: solid;
+        border-radius: 20px;
+        text-align: right;
+        background-color: lightgrey;
+        font-size: x-large;
+        padding: 10px;
+    }
+
+    .list p {
+        margin: 0;
+    }
+
+    .list button {
+        justify-content: center;
+        align-items: center;
+        margin-right: 3px;
+        border-radius: 30%;
+        transition: 0.2s;
+    }
+
+    @media only screen and (max-width: 600px) {
+        .list {
+            font-size: large;
+        }
+
+        .list button {
+            margin-right: 1px;
+        }
+    }
+
+    </style>
+
+</body>
+</html>

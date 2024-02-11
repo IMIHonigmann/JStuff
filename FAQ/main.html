@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>FAQ Example</title>
+
+    <div id="title">
+        Frequently Asked Questions and Answers
+    </div>
+
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-image: linear-gradient(grey, white);
+            background-repeat: no-repeat;
+        }
+
+        button {
+            background-color: rgba(214, 214, 214, 0);
+            border-style: none;
+            border-radius: 2px;
+            font-size: xx-large;
+            opacity: 1;
+            z-index: 10;
+            block-size: 1;
+            width: 40px;
+
+            transition-duration: 0.3s;
+        }
+
+        button:hover {
+            background-color: rgba(214, 214, 214, 0);
+            border-style: none;
+            transition-duration: 0.2s;
+            cursor: pointer;
+        }
+
+        .buttonturn {
+            transform: rotate(90deg);
+            overflow: hidden;
+            transition-duration: 0.3s;
+        }
+
+        .answer-container {
+            overflow: hidden;
+            transform: translate(-7.5px, 0px);
+            opacity: 0;
+            transition-duration: 0.3s;
+            max-height: 0px;
+        }
+
+        .answer-container.show {
+            transform: translate(5px, 0px);
+            opacity: 1;
+            transition-duration: 0.3s;
+            max-height: 200px;
+            margin: 0%;
+        }
+
+        .alldiv-container {
+            background-color: rgb(214, 214, 214);
+            border-style: solid;
+            border-radius: 10px;
+            transform: translate(10%, 50%);
+
+            width: 80%;
+            margin: 10px;
+            padding: 10px;
+
+            transition-duration: 0.3s;
+        }
+
+        .changeMarginOnClick {
+            margin-bottom: 40px;
+            margin-top: -5px;
+        }
+
+        .alldiv-container:hover {
+            transform: translate(12%, 50%);
+            background-color: rgb(165, 165, 165);
+
+            transition-duration: 0.3s;
+        }
+
+        h2 {
+            transform: translate(10px, 0px);
+        }
+
+        #title {
+            font-size: x-large;
+            font-weight: bolder;
+            transform: translate(0px, 60px);
+            text-align: center;
+        }
+
+    </style>
+</head>
+
+<body>
+    <script>
+        
+        var idIncrement = 0;
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+
+            function createFAQElement(question, answer) {
+                var id = idIncrement;
+
+
+                var h2 = document.createElement('h2');
+                var button = document.createElement('button');
+                var allDiv = document.createElement('div');
+                var answerDiv = document.createElement('div');
+                var paragraph = document.createElement('p');
+
+                h2.textContent = question + '?';
+                button.classList.add('q' + idIncrement);
+                button.textContent = '>';
+                answerDiv.classList.add('answer-container', 'div' + id);
+                allDiv.classList.add('alldiv-container', 'alldiv' + id);
+                paragraph.textContent = answer;
+
+                allDiv.appendChild(h2);
+                allDiv.appendChild(button);
+                allDiv.appendChild(answerDiv);
+                answerDiv.appendChild(paragraph);
+
+                document.body.appendChild(allDiv);
+
+
+                document.querySelector('.alldiv' + id).addEventListener('click', function () {
+                document.querySelector('.q' + id).classList.toggle('buttonturn');
+                document.querySelector('.alldiv' + id).classList.toggle('changeMarginOnClick');
+                document.querySelector('.div' + id).classList.toggle('show');
+            });
+                idIncrement++;
+            }
+
+        
+            createFAQElement('What is our mission', 'to study');
+            createFAQElement('Why are we doing this', 'to learn');
+            createFAQElement('How do we achive our goals', 'coding programs for clients they enjoy');
+            createFAQElement('You wanna ligma balls', 'Yes its true removing the apostrophe can indeed have an impact on strings. Suddenly possessive pronouns and contractions lose their distinction, making it a bit challenging to discern whether youre referring to possession or a contraction. Its crucial to consider context and clarity when deciding to eliminate apostrophes from strings. While it may seem like a simple tweak, its absence can alter the meaning of sentences and make communication less clear. So, be mindful of the trade-offs when experimenting with apostrophe-free strings!');
+
+            
+
+            
+        });
+    </script>
+</body>
+
+</html>
