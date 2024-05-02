@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html style="color: green">
+    <!-- this is a comment -->
+    <head>
+      <title>Empty Page</title>
+      
+      <style>
+        body, html {
+          height: 100%;
+        }
+        
+        body {
+          font-family: Comic Sans MS;
+        }
+        td {
+          border: 2px solid #000;
+          margin: 5px;
+          padding: 80px;
+          display: inline-block;
+          border-collapse: collapse;
+          }
+        td:hover {
+          cursor: pointer;
+        }
+        body.load td:hover {
+          cursor: not-allowed;
+        }
+        
+        .transparent-fullscreen:hover {
+          cursor: not-allowed;
+        }
+        
+        .transparent-fullscreen {
+          display: none;
+          background-color: transparent;
+          height: 100%;
+          width: 100%;
+          position: fixed;
+          z-index: 100;
+        }
+        
+        td img {
+          width: 30%;
+          height: 30%;
+          
+        }
+        
+      </style>
+    </head>
+    <body>
+      <div class="transparent-fullscreen"></div>
+      <table>
+        <tr> <td id="cell11"></td> <td id="cell12"></td> <td id="cell13"></td> <td id="cell14"></td> </tr>
+        <tr> <td id="cell21"></td> <td id="cell22"></td> <td id="cell23"></td> <td id="cell24"></td> </tr>
+      </table>
+      <h1 id="foundcount"> Found Pairs: </h1>
+      <div id="imgcontainer"> </div>
+      
+      <script>
+        var allTds = document.querySelectorAll('td');
+        var clickedHowMuch = 0;
+        var firstClickedElement;
+        var secondClickedElement;
+        var pairCounter = 0;
+        var link = "https://api.giphy.com/v1/gifs/search?api_key=vCZmB3iyPbNmaC7D8w5zCCsI3SAFx5py&q=" + "burger" + "&limit=" + 4 + "&offset=0&rating=g&lang=en";
+       	var imgArray = {};
+        var iteratedNumber = 0;
+        
+        fetch(link).then(function(daLink){ return daLink.json(); })
+        			.then(function(linkData) 
+                          {
+          					linkData.data.forEach(function(gaffer)
+                            {
+                            	var iterativeLink = gaffer.images.original.url;
+                            	var iterativeImage = document.createElement('img');
+                            	iterativeImage.src = iterativeLink;
+                              	imgArray['img'+iteratedNumber] = iterativeImage;
+                            	document.getElementById('imgcontainer').appendChild(iterativeImage);
+                              iteratedNumber++;
+                          	});
+                         }).catch(function(error){});
+        
+        //inserting gifs not possible, clashes to heavily with the randomized colors :(
+        /*
+        setTimeout(function(){
+          allTds.forEach(function(solo){
+            if(solo.classList.contains('yellow')) solo.appendChild(imgArray.img0);
+            else if(solo.classList.contains('green')) solo.appendChild(imgArray.img1);
+            else if(solo.classList.contains('blue')) solo.appendChild(imgArray.img2);
+            else if(solo.classList.contains('red')) solo.appendChild(imgArray.img3);
+          });
+          
+        }, 500);
+        */
+        
+        
+        var pairs = {
+          	pair1: 'green',
+        	pair2: 'red',
+        	pair3: 'blue',
+        	pair4: 'yellow'
+        };
+        var usedUpPairs = {
+        	pair1: 0,
+        	pair2: 0,
+        	pair3: 0,
+        	pair4: 0
+        };
+        function generateRandomNumber(min, max) {
+          return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        
+        
+        allTds.forEach(function(singleTd) {
+          
+          var rand = generateRandomNumber(1,4);
+          while(usedUpPairs['pair' + rand] >= 2) rand = generateRandomNumber(1,4);
+          singleTd.classList.add(pairs['pair' + rand]);
+          
+          //search
+          
+          usedUpPairs['pair' + rand]++;
+          
+          singleTd.addEventListener('click', amogus);
+          
+            function amogus(event){
+          	singleTd.style.backgroundColor = pairs['pair' + rand];
+            singleTd.classList.add('show');
+            
+            if(clickedHowMuch < 1){
+              firstClickedElement = event.target;
+              clickedHowMuch++;
+            }
+            else if(clickedHowMuch < 2){
+              	secondClickedElement = event.target;
+              	document.body.classList.add('load');
+              	document.querySelector('.transparent-fullscreen').style.display = 'block';
+              
+              	if(firstClickedElement.classList.value == secondClickedElement.classList.value && 
+                   firstClickedElement.id != secondClickedElement.id)
+                {
+                  firstClickedElement.classList.add('done');
+                  secondClickedElement.classList.add('done');
+                  singleTd.removeEventListener('click', amogus);
+                  pairCounter++;
+                  document.getElementById('foundcount').textContent = 'Found Pairs: ' + pairCounter;
+                  if(pairCounter > 3) document.getElementById('foundcount').textContent = 'You have won';
+                }
+
+              	setTimeout(function(){
+              	allTds.forEach(function(ssingleTd) {
+                  if(!ssingleTd.classList.contains('done')) {
+                    ssingleTd.style.backgroundColor = 'white';
+                  	ssingleTd.classList.remove('show');
+                    document.body.classList.remove('load');
+                    document.querySelector('.transparent-fullscreen').style.display = 'none';
+                  }
+                });
+            	clickedHowMuch = 0;
+                firstClickedElement  = 5;
+                secondClickedElement = 6;
+              }, 600);
+              	
+            }
+           }
+          
+          });
+        
+      </script>
+    </body>
+</html>
+                        
