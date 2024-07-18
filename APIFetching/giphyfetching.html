@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+  
+  <style>
+    #inputContainer {
+      background-color: rgba(173,216,230, 0.5);
+      width: 100%;
+      padding: 5px;
+      transform: translate(-10px, -10px);
+      position: fixed;
+    }
+    input {
+      border-style: inset;
+      border-radius: 5px;
+      padding: 5px;
+      font-family: Comic Sans MS, cursive;
+    }
+    button {
+      border-radius: 5px;
+      padding: 5px 10px 5px 10px;
+      transition: 0.2s;
+    }
+    button:hover {
+      cursor: pointer;
+      background-color: lightgreen;
+      transition: 0.2s;
+    }
+    img {
+      width: 30%;
+      height: 30%;
+      border-radius: 15px;
+      border-style: groove;
+    }
+    
+    #ligmaelement {
+      text-align: center;
+    }
+    
+  </style>
+<head>
+  <title>Ex11 GIPHY</title>
+  <div id="inputContainer">
+    <input type="text" placeholder="insert stuff here" id="tags">
+  	<button onclick="sendTags()" id="sendButton"> MEMES </button>
+    <button onclick="rapidFire()" id="sendMulti"> LESSGOOOOOO </button>
+    <input type="number" id="howmany" placeholder="How many gifs?" value="20" style="width:6%; transition:0.6s">
+    <label for="howmany" id="yochill" style="margin-left:10px; font-family:Courier New; font-weight:bold"> WIEVIEL GOOF? </label>
+   </div>
+  
+</head>
+<body>
+  <div id="ligmaelement"></div>
+  
+<script>
+  
+  var link;
+  var tags;
+  var apiKey = "vCZmB3iyPbNmaC7D8w5zCCsI3SAFx5py";  
+  document.getElementById('tags').addEventListener('keypress', function(event) {
+    
+    if(event.keyCode === 13)
+    {
+		event.preventDefault();
+    	sendTags();
+    }
+  });
+  
+  document.getElementById('tags').focus();
+  
+  
+  function sendTags()
+  {
+   tags = document.getElementById('tags').value;
+   var safeString = encodeURIComponent(tags);
+    
+   link = "https://api.giphy.com/v1/gifs/random?api_key=" + apiKey + "&tag=" + safeString + "&rating=G";
+   document.getElementById('tags').value = "";
+   if(safeString == "huh") {
+		window.open('store.steampowered.com', '_blank');
+   }
+   
+   fetch(link)
+    .then(function(response) {
+     document.getElementById('tags').innerHTML = '';
+     
+     return response.json();
+    })
+    .then(function(responseData) {
+     var imageUrl = responseData.data.images.original.url;
+     console.log(responseData.data);
+          
+     var newImage = document.createElement('img');
+     newImage.src = imageUrl;
+     document.getElementById('ligmaelement').appendChild(newImage);
+     document.getElementById('tags').focus();
+     
+     window.scrollTo({
+       top: document.body.scrollHeight,
+       behavior: 'smooth'
+     });
+     })
+    .catch(function(error) {
+     console.error('Error:', error);
+     });
+  }
+  
+  function rapidFire() {
+    
+    var tagss = document.getElementById('tags').value;
+   	var saferString = encodeURIComponent(tagss);
+    var howManyGifs = document.getElementById('howmany').value;
+    var searchEndpoint = "https://api.giphy.com/v1/gifs/search?api_key=" + apiKey + "&q=" + saferString + "&limit=" + howManyGifs +"&offset=0&rating=g&lang=en";
+    
+    fetch(searchEndpoint)
+    .then(function(responseThing) { return responseThing.json(); })
+    .then(function(barbequebacondata) {
+        barbequebacondata.data.forEach(function(gif) {
+        	var multiURL = gif.images.original.url;
+        	var newMultiImage = document.createElement('img');
+      		newMultiImage.src = multiURL;
+        	document.getElementById('ligmaelement').appendChild(newMultiImage);
+      });
+      
+    })
+    .catch(function(error) {
+      console.error('Program just crashed:', error);
+    });
+  }
+  
+  var howManyField = document.getElementById('howmany');
+  howManyField.addEventListener('input', function () {
+    var textForNumba = document.getElementById('yochill');
+    	 if(howManyField.value < 10)  {textForNumba.textContent = "Don't be shy"; howManyField.style.backgroundColor = "white";}
+    else if(howManyField.value > 200) {textForNumba.textContent = "STOP ALREADY!"; howManyField.style.backgroundColor = "red";}
+    else if(howManyField.value > 170) {textForNumba.textContent = "I said stop!"; howManyField.style.backgroundColor = "orange";}
+    else if(howManyField.value > 140) {textForNumba.textContent = "hey! stop it"; howManyField.style.backgroundColor = "orange";}
+    else if(howManyField.value > 110) {textForNumba.textContent = "are you crazy"; howManyField.style.backgroundColor = "yellow";}
+    else if(howManyField.value > 90)  {textForNumba.textContent = "bro what are you doing"; howManyField.style.backgroundColor = "yellow";}
+    else if(howManyField.value > 70)  {textForNumba.textContent = "alright thats enough"; howManyField.style.backgroundColor = "yellow";}
+    else if(howManyField.value > 50)  {textForNumba.textContent = "Awesome"; howManyField.style.backgroundColor = "greenyellow";}
+    else if(howManyField.value > 30)  {textForNumba.textContent = "Thats the spirit"; howManyField.style.backgroundColor = "greenyellow";}
+    else if(howManyField.value > 20)  {textForNumba.textContent = "Yeah"; howManyField.style.backgroundColor = "greenyellow";}
+    else if(howManyField.value > 10)  {textForNumba.textContent = "Nich so wenig brudi"; howManyField.style.backgroundColor = "white";}
+
+  
+  
+  
+  });
+  
+  
+</script>
+  <!-- Write Elements for Text input and Button-->
+</body>
+</html>
